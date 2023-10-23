@@ -3,3 +3,8 @@ numpy
 pandas
 pydeck
 streamlit
+geocoder
+folium
+streamlit_js_eval
+geopy
+streamlit_extras
