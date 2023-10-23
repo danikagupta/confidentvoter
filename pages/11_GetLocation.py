@@ -4,28 +4,23 @@ import folium
 import requests
 import pydeck as pdk
 
+from geopy.geocoders import Nominatim
 from streamlit_js_eval import streamlit_js_eval, copy_to_clipboard, create_share_link, get_geolocation
+from streamlit_extras.switch_page_button import switch_page
+
+st.set_page_config(
+        page_title="Confident Voter",
+        page_icon="🗳️",
+)
 
 loc = get_geolocation()
-st.write(f"Your coordinates are {loc}")
-
-
+#st.write(f"Your coordinates are {loc}")
 # Get latitude and longitude from loc
 lat, lng = loc['coords']['latitude'], loc['coords']['longitude']
-
-# BEGIN: 1a2b3c4d5e6f
-
-from geopy.geocoders import Nominatim
-
 geolocator = Nominatim(user_agent="my-app")
-
 location = geolocator.reverse(f"{lat}, {lng}")
-
 address = location.address
-
-st.write(f"Your address is {address}")
-
-# END: 1a2b3c4d5e6f
+#st.write(f"Your address is {address}")
 
 # Make request to Google Civic Information API
 api_key="AIzaSyD8FnzwnW9TppWWJJEFYo7IPoIIBRbT7yw"
@@ -47,12 +42,20 @@ for k,v in datadivision.items():
     print(f"\n Key,value:{k}={v}====\n")
     district_id=k
     district_name=v["name"]
-st.sidebar.write(f"FF district_id={district_id}\n FF district_name={district_name}")
+#st.sidebar.write(f"FF district_id={district_id}\n FF district_name={district_name}")
 
 congressional_district = district_name
 
 # Display congressional district information using Streamlit
-st.write(f"Your congressional district is {congressional_district}")
+st.markdown(f"## It looks like you are in {congressional_district}")
+(col1,col2)=st.columns(2)
+with col1:
+    if st.button(f"## Yes. This is my district."):
+        switch_page("DataFrame_Demo")
+
+with col2:
+    if st.button(f"## No. I will enter my district manually."):
+        switch_page("DataFrame_Demo")
 layers=[
         # Create a marker layer at the specified location
         pdk.Layer(
