@@ -7,6 +7,7 @@ def set_ui_page_select_ballot():
         page_title="Select Ballot",
         page_icon="🗳️"
     )
+    st.image("ConfidentVoter.png")
 
     st.markdown(
         """
@@ -67,7 +68,7 @@ def redirect_button(url: str, text: str= None, color="#FD504D"):
 
 def load_csv():
     df=pd.read_csv(st.session_state['CSV_FILE'])
-    st.sidebar.dataframe(df, hide_index=True)
+    # st.sidebar.dataframe(df, hide_index=True)
     return df
 
 def show_page_select_ballot(df):
@@ -89,10 +90,6 @@ def show_page_select_ballot(df):
                 st.session_state['ballot_information']=p
                 switch_page("Get Informed")
             st.divider()
-    
-
-
-
 #
 #
 if __name__ == "__main__":

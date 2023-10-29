@@ -21,10 +21,11 @@ from langchain.llms import OpenAI
 
 
 def set_ui_page_get_informed():
-    add_logo("http://placekitten.com/120/120")
+    st.image("ConfidentVoter.png")
+    #add_logo("http://placekitten.com/120/120")
 
 
-def load_faiss():
+def load_faiss(text):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=3000, chunk_overlap=100,length_function=len, is_separator_regex=False)
     docs = text_splitter.create_documents([text])
     embeddings = OpenAIEmbeddings()
@@ -41,10 +42,18 @@ def augmented_content(inp,info):
 def show_page_get_informed(ballot_index,ballot_information,ballot_name):
     st.markdown(f"# Get Informed about {ballot_name}")
     SYSTEM_MESSAGE={"role": "system", 
-                "content": "Ignore all previous commands. You are a helpful and patient guide based in Silicon Valley."
+                "content": """
+                You are ConfidentVoter - a helpful App that guides the voters about 
+                the pros and cons of various issues based on their policy preferences.
+                Remember to keep your answers concise and directly addressing the questions asked,
+                taking into account the policy preferences that the user has provided.
+                """
                 }
     ASSISTANT_MESSAGE={"role": "assistant", 
-                "content": f"What would you like to know about {ballot_name}"
+                "content": f"""
+                What would you like to know about {ballot_name}?
+                Please remember to provide me with your policy preferences so I can provide you with the best possible information.
+                """
                 }
 
     if "messages" not in st.session_state:
@@ -88,8 +97,6 @@ def show_page_get_informed(ballot_index,ballot_information,ballot_name):
 #
 if __name__ == "__main__":
     set_ui_page_get_informed()
-    #st.session_state['ballot_index']="IIIIIIIIIIIIIII"
-    #st.session_state['ballot_information']="KKKKKKKKKKK"
     idx=st.session_state['ballot_index']
     inf=st.session_state['ballot_information']
     mea=st.session_state['measure'];

@@ -14,6 +14,7 @@ def set_ui_page_get_location():
         page_title="Confident Voter",
         page_icon="🗳️"
     )
+    st.image("ConfidentVoter.png")
 
     st.markdown(
         """
@@ -82,9 +83,9 @@ def get_district(lat,lng):
     #st.sidebar.write(response.json())
     #print(f"\n Division={datadivision}====\n")
     for k,v in datadivision.items():
-        print(f"\n Key,value:{k}={v}====\n")
+        #print(f"\n Key,value:{k}={v}====\n")
         district_info=re.split('[:/]',k)
-        print("district_info=",district_info)
+        #print("district_info=",district_info)
         district_id="-".join([district_info[4].upper(),district_info[6]])
         district_name=v["name"]
     #st.sidebar.write(f"FF district_id={district_id}\n FF district_name={district_name}")
@@ -125,7 +126,7 @@ if __name__ == "__main__":
     set_ui_page_get_location()
     (lat,lng)=get_loc()
     (district_id,district_name)=get_district(lat,lng)
-    print(f"district_id={district_id} for congressional_district={district_name}")
+    #print(f"district_id={district_id} for congressional_district={district_name}")
     show_district(district_id)
     draw_map(lat,lng)
     st.session_state['district_id']=district_id          

@@ -44,6 +44,7 @@ def set_ui_page_email_me():
         page_title="Select Ballot",
         page_icon="🗳️"
     )
+    st.image("ConfidentVoter.png")
 
     st.markdown(
         """
@@ -89,13 +90,17 @@ def set_ui_page_email_me():
 def send_email(to_emails = 'testEmail@gprof.com',
                subject='Test Email: Please respond',
                message = '<strong>This should work</strong> even without Bolding'):
+  #st.write(f"## Sending chat transcript to {to_emails}")
+  #print(f"## Sending chat transcript to {to_emails}")
   message = Mail(
-      from_email='counsel@gprof.com',
+      from_email='Confident Voter <counsel@gprof.com>',
       to_emails=to_emails,
       subject=subject,
       html_content=message)
   try:
-      sg = SendGridAPIClient('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')
+      sg_key=os.environ['SENDGRID_API_KEY']
+      print(f"SendGrid key is: {sg_key}")
+      sg = SendGridAPIClient(sg_key)
       response = sg.send(message)
       print(response.status_code)
       print(response.body)
@@ -106,19 +111,19 @@ def send_email(to_emails = 'testEmail@gprof.com',
       print("Did not succeed")
 
 def get_conversation_summary():
-    formatted_messages = [f"## {m['role']}:\n### {m['content']}\n\n" for m in st.session_state.messages]
+    role_names={"system":"System","assistant":"ConfidentVoter","user":"You"}
+    formatted_messages = [f"## {role_names[m['role']]}:\n### {m['content']}\n\n" for m in st.session_state.messages[2:]]
     formatted_string="\n**********\n".join(formatted_messages)
     #print(f"Formatted string is {formatted_string}")
     summary=f"""
-### Hi Voter
+## Hi Voter
 
-Here is the transcript of your chat. 
+### Thank you for taking the time to ask the questions at the top of your mind. We are here to help you get savvy about Civics.
     
-Happy Voting!!
+### -Confident Voter
     
--Confident Voter
-    
-Here is the transcript: 
+### Here is the transcript: 
+
 {formatted_string}
     """
     #print(f"Summary is {summary}")
@@ -131,7 +136,8 @@ def ui_send_email():
     em=st.text_input("Email address")
     if(st.button("Send Email")):
         g=get_conversation_summary()
-        send_email(em,'Summary of your chat about the upcoming elections',g)
+        ballot_name=st.session_state['ballot_name']
+        send_email(em,f'Transcript of your chat about {ballot_name}',g)
         #with st.sidebar.expander(f"Email message sent to {em}"):
         #    st.markdown(f"To: {em}.\n Body: {g}")
         st.write(f"## Your chat has been sent to {em}\n## No information will be saved.")
