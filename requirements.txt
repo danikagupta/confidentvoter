@@ -8,3 +8,10 @@ folium
 streamlit_js_eval
 geopy
 streamlit_extras
+openai
+pinecone-client
+langchain 
+faiss-cpu 
+PyPDF2 
+tiktoken
+sendgrid

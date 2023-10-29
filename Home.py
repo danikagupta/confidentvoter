@@ -34,7 +34,7 @@ def run():
     )
 
     if st.button("Next page"):
-            switch_page("GetLocation")
+            switch_page("Locate District")
 
 def set_defaults():
     st.session_state['ballot'] = "Unknown"
